@@ -1,24 +1,25 @@
 /* Smart pointers in C++ */
 #include <iostream>
+#include <memory>
 
-int main(void)
+class Example
 {
-    int var{10};
-    size_t size{100};
-    // Dynamically allocate memory for an array of 100 integers on the heap (at runtime)
-    int *array = new (std::nothrow) int[size]{};
-    for (size_t i{0}; i < size; i++)
+public:
+    Example()
     {
-        array[i] = i * 2;
+        std::cout << "The constructor of the base class ran..." << std::endl;
     }
-    int *pointer{array};
-    int *ptr{&var};
+    ~Example()
+    {
+        std::cout << "The destructor of the base class ran... " << std::endl;
+    }
+};
 
-    std::cout << "The pointer is pointer at the start of the dynamically alllocated array: " << pointer << std::endl;
-    // std::cout << "The pointer points to the memory address of: " << ptr << std::endl;
-    // std::cout << "The value at the addres pointer is pointing at is " << *ptr << std::endl;
-    // std::cout << "The address of the variable is: " << &var << std::endl;
-    delete[] array;
-    // array = nullptr;
+int main()
+{
+    // Creating a unique pointer to dynamically allocate memory on the heap for a new object (no need to manually deallocate memory after the object has been destroyed)
+    std::unique_ptr<Example> example{std::unique_ptr<Example>(new (std::nothrow) Example{})};
+    // Instantiate a new example object
+    // Example example;
     return 0;
 }
