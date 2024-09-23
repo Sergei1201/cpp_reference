@@ -1,6 +1,7 @@
 /* Function pointers in C++ */
 #include <iostream>
 #include <string>
+#include <functional>
 
 /* Function forward declaration */
 int add(int x, int y);
