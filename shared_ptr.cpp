@@ -33,7 +33,7 @@ public:
 int main(void)
 {
     // Create an object by using a shared pointer (without having to use new and delete)
-    std::shared_ptr<Person> p{std::make_shared<Person>("Sergei", "Sokolov", 40)};
+    std::shared_ptr<Person> p{std::make_shared<Person>("Sergei", "Sokolov", 40)}; // heap allocated
     // Now let's create another pointer and make it point to the first one (remember that unique pointer doesn't allow that (sharing, only transferring the ownership))
     {
         std::shared_ptr<Person> p2{p};
