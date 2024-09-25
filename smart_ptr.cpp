@@ -1,39 +1,55 @@
-/* Smart pointers in C++ */
+/* Introducing smart pointers in C++ */
+// Example using a smart pointer for accessing member variables and member function of a given class
 #include <iostream>
-#include <memory>
 #include <string>
+#include <memory>
 
-class Example
+class Person
 {
 private:
+    // Member variables
     std::string m_firstName{};
     std::string m_lastName{};
+    int m_age{};
 
 public:
-    Example(std::string_view firstName, std::string_view lastName)
-        : m_firstName{firstName}, m_lastName{lastName}
+    // Constructor
+    Person(std::string_view firstName, std::string_view lastName, int age)
+        : m_firstName{firstName}, m_lastName{lastName}, m_age{age}
     {
-        std::cout << "The constructor of the base class ran..." << std::endl;
+        std::cout << "Constructor ran..." << std::endl;
     }
-    ~Example()
+    // Destructor
+    ~Person()
     {
-        std::cout << "The destructor of the base class ran... " << std::endl;
+        std::cout << "Destructor ran..." << std::endl;
     }
-    const std::string sayHello()
+    // Member functions
+    std::string greetings() const
     {
-        return "Hello " + m_firstName + " " + m_lastName;
-    }
+        return "Greetings " + m_firstName + " " + m_lastName + ". You are " + std::to_string(m_age);
+    };
 };
 
-int main()
+// Instantiate a new person object by dynamically allocating memory on the heap at runtime
+int main(void)
 {
-    // Creating a unique pointer to dynamically allocate memory on the heap for a new object (no need to manually deallocate memory after the object has been destroyed)
-    // Example *pointer{new (std::nothrow) Example{}};
-    // std::unique_ptr<Example> example{std::unique_ptr<Example>(new (std::nothrow) Example{})};
-    // Dynamically allocating an array of objects using smart pointers
-    std::unique_ptr<Example> example{std::make_unique<Example>("Sergei", "Sokolov")};
-    std::cout << example->sayHello() << std::endl;
-    //  Instantiate a new example object
-    //  Example example;
+    // 1. By manually allocating and deallocating memory for a new object
+    // Person *p1{new (std::nothrow) Person{"Sergei", "Sokolov", 40}};
+    // std::cout << p1->greetings() << std::endl;
+    // delete p1;
+    // p1 = nullptr;
+    // 2. By using a smart pointer to automatically deallocate memory when it's not needed anymore
+    // std::unique_ptr<Person> p1{std::unique_ptr<Person>(new (std::nothrow) Person{"Sergei", "Sokolov", 40})};
+    // std::cout << p1->greetings() << std::endl;
+    // // Here we do not have to manually deallocate memory after we've used the object
+    // 3. By using a unique pointer with make_unique function without using new operator
+    // std::unique_ptr<Person> p1{std::make_unique<Person>("Sergei", "Sokolov", 40)}; /* Do not have to
+    // worry about deallocating memory as well, instead the compiler will do this job automatically */
+    // 4. We can transfer the ownership of one pointer to another (without making copies)
+    // Person *p{new (std::nothrow) Person{"Sergei", "Sokolov", 40}};
+    std::unique_ptr<Person> p1{std::make_unique<Person>("Sergei", "Sokolov", 40)};
+    std::unique_ptr<Person> p2{std::move(p1)};
+    std::cout << p2->greetings() << std::endl;
     return 0;
 }
