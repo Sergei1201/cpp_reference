@@ -1,25 +1,22 @@
-/* Working with header files in C++  - an interface */
+/* Header file in C++ - prototype our class */
 #include <iostream>
-#include <string>
-#ifndef PERSON_HPP
-#define PERSON_HPP
+#include <memory>
+#ifndef PERSON_H
+#define PERSON_H
+
 class Person
 {
-    // Private member variables
+    // Private member variables for initializing an object
 private:
     std::string m_firstName{};
     std::string m_lastName{};
     int m_age{};
-    // Public members of the class
+
 public:
-    Person(std::string_view firstName, std::string_view lastName, int age)
-        : m_firstName{firstName}, m_lastName{lastName}, m_age{age}
-    {
-    }
-    // Public member function
-    std::string greetings() const
-    {
-        return "Greetings " + m_firstName + " " + m_lastName + ". You are " + std::to_string(m_age);
-    }
+    // Public constructor
+    Person(std::string_view firstName, std::string_view lastName, int age);
+    // Public member functions (greetings)
+    std::string greetings() const;
 };
+
 #endif

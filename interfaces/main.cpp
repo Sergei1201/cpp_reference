@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <memory>
-#include "person.hpp"
+#include "./person.hpp"
 
 int main(int argc, char **argv)
 {
