@@ -99,7 +99,7 @@ int main(void)
     array1.setArray(0, 255);
     // Let's create another object by copying the elements of the first object into it
     // Without writing a custom copy constructor we'll get only a shallow copy of the object because
-    // the memory will be shared with the firist object. Let's see what's going to happen in this case
+    // the memory will be shared with the first object. Let's see what's going to happen in this case
     // Print the elements of the array
     array1.printArray();
     Array array2;
