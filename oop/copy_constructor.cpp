@@ -1,41 +1,69 @@
-/* Using copy assignment, copy constructor, copy destructor in C++ */
+/* Copy constructor, copy assignment operator, destructors in C++ */
 #include <iostream>
 
 class Array
 {
-    // Private members
+    /* Private data members */
+
 private:
     int *data{};
     const size_t size{10};
-    // Public members
+
+    /* Public constructor & member functions */
+
 public:
     // Regular constructor
     Array()
     {
-        std::cout << "Constructor ran.." << std::endl;
-        // Dynamically allocating memory in the heap for an array of integers when an object is being created
+        std::cout << "Constructor ran..." << std::endl;
+        // Dynamically allocate memory in the heap for an array of integers when an object is being constructed
         data = new int[size];
     }
-    // Custom copy constructor for creating a deep copy of an object with its own unique memory location
-    // This copy constructor runs when a copy assignments is made
-    Array(const Array &copyArray)
+
+    // Copy constructor to create a deep copy of an object (the constructor is invoked when we make a copy of an object) with its own memory location
+    Array(const Array &rhs)
     {
         std::cout << "Copy constructor ran..." << std::endl;
+        // Allocating memory for a new object dynamically in the heap before the object is created
+        data = new int[size];
+        // Copying data from the original object to the newly created object
+        for (size_t i{0}; i < size; i++)
+        {
+            data[i] = rhs.data[i];
+        }
+    }
+
+    // Copy assignment operator (is called when an object has already been constructed) for making copies of objects with their own memory location after the object has been created
+    Array &operator=(const Array &rhs)
+    {
+        std::cout << "Copy assignment operator ran..." << std::endl;
+        // Check if the object points to itself
+        if (&rhs == this)
+        {
+            return *this;
+        }
+        // Deallocate memory before copy assignment
+        if (this != nullptr)
+            delete[] data;
+        // Allocate memory dynamically in the heap for copy assignment
         data = new int[size];
         for (size_t i{0}; i < size; i++)
         {
-            data[i] = copyArray.data[i];
+            data[i] = rhs.data[i];
         }
+        return *this;
     }
-    // Destructor
+
+    // Destructor deallocates memory by returning it back to the operating system after objects have been destroyed
     ~Array()
     {
         std::cout << "Destructor ran..." << std::endl;
-        // Returning memory back to the operating system after an object has been destroyed
         delete[] data;
     }
-    /* Member functions */
-    // Fill array with some elements
+
+    /* Public member functions */
+
+    // Filling an array with some data
     void fillArray()
     {
         for (size_t i{0}; i < size; i++)
@@ -43,12 +71,14 @@ public:
             data[i] = i * 2;
         }
     }
+
     // Set elements of the array
-    void setArrayElements(int index, int arrData)
+    void setArray(int index, int arrData)
     {
         data[index] = arrData;
     }
-    // Print elements of the array
+
+    // Printing the array
     void printArray()
     {
         for (size_t i{0}; i < size; i++)
@@ -63,14 +93,19 @@ int main(void)
 {
     // Instantiate the Array class
     Array array1;
-    // Fill our array
+    // Fill our array using member function
     array1.fillArray();
-    // Set elements of the array
-    array1.setArrayElements(0, 250);
+    // Set a new value to the array
+    array1.setArray(0, 255);
+    // Let's create another object by copying the elements of the first object into it
+    // Without writing a custom copy constructor we'll get only a shallow copy of the object because
+    // the memory will be shared with the firist object. Let's see what's going to happen in this case
+    // Print the elements of the array
     array1.printArray();
-    // Copy assignment of the class (shallow copying with the same memory address of the first object)
-    Array array2 = array1;
+    Array array2;
+    array2 = array1;
+    // Array array2{array1};
     array2.printArray();
-    // Make sure all the memory has been returned back to the OS after the objects have been destroyed (the destructor runs)
+    // The memory used should be returned back to the OS after invoking the destructor (when objects are destroyed)
     return 0;
 }
