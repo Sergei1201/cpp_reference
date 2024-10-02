@@ -1,4 +1,4 @@
-/* Using copy constructor, copy destructor, copy assignment in C++ */
+/* Using copy assignment, copy constructor, copy destructor in C++ */
 #include <iostream>
 
 class Array
@@ -6,32 +6,52 @@ class Array
     // Private members
 private:
     int *data{};
-    const size_t size{5};
-
-public:
+    const size_t size{10};
     // Public members
+public:
+    // Regular constructor
     Array()
     {
-        // Allocate memory in the heap dynamically for the array when an object is being created
-        data = new int[size]{};
+        std::cout << "Constructor ran.." << std::endl;
+        // Dynamically allocating memory in the heap for an array of integers when an object is being created
+        data = new int[size];
     }
-    // Deallocate memory (return it back to the operating system) after the object is destroyed
+    // Custom copy constructor for creating a deep copy of an object with its own unique memory location
+    // This copy constructor runs when a copy assignments is made
+    Array(const Array &copyArray)
+    {
+        std::cout << "Copy constructor ran..." << std::endl;
+        data = new int[size];
+        for (size_t i{0}; i < size; i++)
+        {
+            data[i] = copyArray.data[i];
+        }
+    }
+    // Destructor
     ~Array()
     {
+        std::cout << "Destructor ran..." << std::endl;
+        // Returning memory back to the operating system after an object has been destroyed
         delete[] data;
     }
-    // Fill out the array with some values
+    /* Member functions */
+    // Fill array with some elements
     void fillArray()
     {
-        for (int i = 0; i < size; i++)
+        for (size_t i{0}; i < size; i++)
         {
             data[i] = i * 2;
         }
     }
-    // Print out the array
+    // Set elements of the array
+    void setArrayElements(int index, int arrData)
+    {
+        data[index] = arrData;
+    }
+    // Print elements of the array
     void printArray()
     {
-        for (int i = 0; i < size; i++)
+        for (size_t i{0}; i < size; i++)
         {
             std::cout << data[i] << "\t";
         }
@@ -41,11 +61,16 @@ public:
 
 int main(void)
 {
-    // Instantiate our class
-    Array array;
-    // Fill our array with some elements
-    array.fillArray();
-    // Print the elements of the array
-    array.printArray();
-    // After the object is destroyed the memory should be released back to the OS when destructor starts working
+    // Instantiate the Array class
+    Array array1;
+    // Fill our array
+    array1.fillArray();
+    // Set elements of the array
+    array1.setArrayElements(0, 250);
+    array1.printArray();
+    // Copy assignment of the class (shallow copying with the same memory address of the first object)
+    Array array2 = array1;
+    array2.printArray();
+    // Make sure all the memory has been returned back to the OS after the objects have been destroyed (the destructor runs)
+    return 0;
 }
