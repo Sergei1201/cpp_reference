@@ -1,52 +1,50 @@
-/* Copy constructor, copy assignment operator, destructors in C++ */
+/* Copy constructor, copy assignment & destructors in C++ */
 #include <iostream>
 
 class Array
 {
-    /* Private data members */
-
+    // Private data members
 private:
+    // We are going to create an array dynamically, therefore create a pointer to data
     int *data{};
-    const size_t size{10};
-
-    /* Public constructor & member functions */
-
+    size_t size{10};
+    // Constructor, public member functions & destructor
 public:
-    // Regular constructor
+    // Here goes the regular constructor which is invoked when an object is being created. When creating an object, we dynamically allocate memory in the heap for an array of integer using the new operator
     Array()
     {
-        std::cout << "Constructor ran..." << std::endl;
-        // Dynamically allocate memory in the heap for an array of integers when an object is being constructed
-        data = new int[size];
+        std::cout << "The usual constructor ran..." << std::endl;
+        data = new int[size]{};
     }
+    // Destructor goes here and after an object has been destroyed we should return memory back to the operating system by manually deallocating memory
 
-    // Copy constructor to create a deep copy of an object (the constructor is invoked when we make a copy of an object) with its own memory location
+    // Explicit (custom) copy constructor to make a deep copy of an object
     Array(const Array &rhs)
     {
         std::cout << "Copy constructor ran..." << std::endl;
-        // Allocating memory for a new object dynamically in the heap before the object is created
-        data = new int[size];
-        // Copying data from the original object to the newly created object
+        // Dynamically allocate your own memory in the heap when an object is being copied
+        data = new int[size]{};
+        // Fill the array with the values of the first array
         for (size_t i{0}; i < size; i++)
         {
             data[i] = rhs.data[i];
         }
     }
 
-    // Copy assignment operator (is called when an object has already been constructed) for making copies of objects with their own memory location after the object has been created
+    // Copy assignment operator runs (makes a copy of an object) when an object has already been constructed
     Array &operator=(const Array &rhs)
     {
         std::cout << "Copy assignment operator ran..." << std::endl;
-        // Check if the object points to itself
+        // Check if the objects points to itself, return a pointer to the object
         if (&rhs == this)
         {
             return *this;
         }
-        // Deallocate memory before copy assignment
-        if (this != nullptr)
-            delete[] data;
-        // Allocate memory dynamically in the heap for copy assignment
-        data = new int[size];
+        // Otherwise, return dynamically allocated memory back to the OS
+        delete[] data;
+        // Reallocate memory for the object
+        data = new int[size]{};
+        // Fill the array with some data
         for (size_t i{0}; i < size; i++)
         {
             data[i] = rhs.data[i];
@@ -54,16 +52,16 @@ public:
         return *this;
     }
 
-    // Destructor deallocates memory by returning it back to the operating system after objects have been destroyed
+    // Destructor (returning memory back to the operating system by freeing up the memory)
     ~Array()
     {
-        std::cout << "Destructor ran..." << std::endl;
+        std::cout << "The destructor ran..." << std::endl;
         delete[] data;
     }
 
     /* Public member functions */
 
-    // Filling an array with some data
+    // Fill our array with some data
     void fillArray()
     {
         for (size_t i{0}; i < size; i++)
@@ -72,13 +70,13 @@ public:
         }
     }
 
-    // Set elements of the array
-    void setArray(int index, int arrData)
+    // Change data in our array
+    void setData(int index, int arrData)
     {
         data[index] = arrData;
     }
 
-    // Printing the array
+    // Print the array to the user
     void printArray()
     {
         for (size_t i{0}; i < size; i++)
@@ -91,21 +89,18 @@ public:
 
 int main(void)
 {
-    // Instantiate the Array class
-    Array array1;
-    // Fill our array using member function
+    // Instantiate class
+    Array array1; // Usual constructor is being invoked
     array1.fillArray();
-    // Set a new value to the array
-    array1.setArray(0, 255);
-    // Let's create another object by copying the elements of the first object into it
-    // Without writing a custom copy constructor we'll get only a shallow copy of the object because
-    // the memory will be shared with the first object. Let's see what's going to happen in this case
-    // Print the elements of the array
     array1.printArray();
-    Array array2;
-    array2 = array1;
-    // Array array2{array1};
+    // Now what's going to happen if we create another object by making a copy of an existing one. What kind of counstructor will run in this particular case? It's the copy constructor (the implicit one which will make a shallow copy of an existing object since they will share the same memory location)
+    // Array array2{array1}; // The implicit copy constructor will make a shallow copy
+    // array2.printArray();
+    // What if we want to create an object by copying an existing one with its own unique memory location (in the heap)? Here comes an explicit copy constructor which will make a full (deep) copy of the object with its own memory address
+    // Array array2{array1}; // The custom copy constructor ran
+    // array2.printArray();
+    Array array2;    // Usual constructor should run now
+    array2 = array1; // When the objects has already been constructed the copy assignment operator should run
     array2.printArray();
-    // The memory used should be returned back to the OS after invoking the destructor (when objects are destroyed)
-    return 0;
+    // After the object has been destroyed the memory is freed (let's make sure that this is exactly the case)
 }
