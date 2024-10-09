@@ -38,12 +38,29 @@ public:
     }
     // Overloading the cout operator (declaring a friend function inside the class)
     friend std::ostream &operator<<(std::ostream &out, const Vector &v);
+    // Overloading == operator (declaring as a friend function inside the class)
+    friend bool operator==(const Vector &lhs, const Vector &rhs);
 };
+
+/* Non-member function definition */
+
 // Overloading the cout operator
 std::ostream &operator<<(std::ostream &out, const Vector &v)
 {
     out << "Vector: " << v.m_x << " " << v.m_y << " " << v.m_z;
     return out;
+}
+// Overloading == operator
+bool operator==(const Vector &lhs, const Vector &rhs)
+{
+    if (lhs.m_x == rhs.m_x && lhs.m_y == rhs.m_y && lhs.m_z == rhs.m_z)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 int main(void)
@@ -60,5 +77,14 @@ int main(void)
     // std::cout << "Overloading the increment operator: " << v3.m_x << " " << v3.m_y << " " << v3.m_z << std::endl;
     Vector v4{5, 10, 15};
     std::cout << v4 << std::endl;
+    Vector v5{5, 0, 15};
+    if (v4 == v5)
+    {
+        std::cout << "The vectors are equal" << std::endl;
+    }
+    else
+    {
+        std::cout << "The vectors are not equal" << std::endl;
+    }
     return 0;
 }
