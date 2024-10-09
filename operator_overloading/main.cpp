@@ -36,7 +36,7 @@ public:
         m_z = m_z + 1;
         return *this;
     }
-    // Overloading the cout operator (declaring a friend functing inside the class)
+    // Overloading the cout operator (declaring a friend function inside the class)
     friend std::ostream &operator<<(std::ostream &out, const Vector &v);
 };
 // Overloading the cout operator
