@@ -1,33 +1,34 @@
-/* RAII usage in C++ */
+/* RAII and operator overloading in C++ */
 #include <iostream>
 
 class Array
 {
+    // Private member variables
 private:
-    int *data{};
+    int *data{nullptr};
     const std::size_t size{5};
 
 public:
+    // Public member functions
     Array()
     {
-        // Dynamically allocate memory for an array at runtime on the heap
+        // Dynamically allocate memory on the heap when an object is being instantiated (for an array)
         data = new int[size]{};
     }
     ~Array()
     {
-        // Deallocate memory after an object has been destroyed
+        // Deallocate memory (return it back to the OS) after the object has been destroyed so that there are no memory leaks left
         delete[] data;
     }
-    // Overloading the subscript [] operator
-    int &operator[](std::size_t idx)
+    // Fill out the array with some data
+    void fillArray()
     {
-        return data[idx];
+        for (std::size_t i{0}; i < size; i++)
+        {
+            data[i] = i * 2;
+        }
     }
-    const int &operator[](std::size_t idx) const
-    {
-        return data[idx];
-    }
-    // Print the elements of the array
+    // Print the array
     void printArray()
     {
         for (std::size_t i{0}; i < size; i++)
@@ -36,20 +37,30 @@ public:
         }
         std::cout << std::endl;
     }
+    // Overload the subscript [] operator
+    int &operator[](std::size_t idx)
+    {
+        return data[idx];
+    }
+    const int &operator[](std::size_t idx) const
+    {
+        return data[idx];
+    }
 };
 
 int main(void)
 {
-    // Instantiate the class (create a new object)
-    Array arr1; // At this moment the memory has been allocated on the heap for an array
-    // Overload the subscript operator
-    arr1[0] = 1;
-    arr1[1] = 3;
-    arr1[2] = 4;
-    arr1[3] = 5;
-    arr1[4] = 10;
+    // Instantiate a new object
+    Array arr1; // While the objects is created the memory is being allocated on the heap for an array
+    // Overload the [] operator
+    // arr1[0] = 1;
+    // arr1[1] = 2;
+    // arr1[2] = 3;
+    // arr1[3] = 4;
+    // arr1[4] = 5;
     // Print the array
+    arr1.fillArray();
     arr1.printArray();
-    // Make sure the memory has been returned back to the OS after the object has been destroyed (by using the valgrind tool)
+    // Make sure the memory has been returned back to the OS after we're done and the object has been destroyed
     return 0;
 }
