@@ -9,7 +9,8 @@ private:
     int m_age{};
 
 public:
-    Person(std::string firstName, std::string lastName, int age)
+    // Using the explicit keyword will prevent the constructor from implicitly converting types by the compiler in order to make our code a little bit safer and more robust
+    explicit Person(std::string firstName, std::string lastName, int age)
         : m_first_name{firstName}, m_last_name{lastName}, m_age{age}
     {
     }
