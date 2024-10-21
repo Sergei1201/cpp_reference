@@ -1,118 +1,121 @@
-/* The rule of 5 in C++ */
+/* Rule of five in C++ */
+/* If any of the following are defined in a class, then you should probably consider implementing all of them
+1. Destructor
+2. Copy constructor
+3. Copy assignment operator
+4. Move constructor
+5. Move assignment operator
+*/
 #include <iostream>
 
 class Array
 {
-    // Private data members
+    /* Private member variables */
 private:
-    const std::size_t size{10};
     int *data{nullptr};
+    const std::size_t size{10};
 
 public:
     /* Public member functions */
-
     // Regular constructor
     Array()
     {
-        // Dynamically allocate memory on the heap during an object construction
-        std::cout << "Constructor ran" << std::endl;
+        std::cout << "Constructor ran.." << std::endl;
+        // Dynamically allocate memory on the heap for an array of integers when the class is being instantiated
         data = new int[size]{};
     }
     // Regular destructor
     ~Array()
     {
-        std::cout << "Destructor ran" << std::endl;
-        // Deallocate memory after object has been destroyed
+        std::cout << "Destructor ran..." << std::endl;
+        // Deallocate memory when an object has been destroyed to return memory back to the OS
         delete[] data;
     }
-    // Custom copy constructor is invoked when a copy of an object is being instantiated to make a deep copy of an object with its own memory location
+    // Custom copy constructor to make a deep copy with its own memory location of an object when the class is being instantiated with an already existing object
     Array(const Array &obj)
     {
-        std::cout << "Copy constructor ran" << std::endl;
-        // Allocate memory dynamically for an array
+        std::cout << "Copy constructor ran.." << std::endl;
+        // When a copy is being made allocate memory on the heap to make a deep copy of an object
         data = new int[size]{};
-        // Fill the array with data from the original object in a for loop
-        for (std::size_t i{0}; i < size; i++)
+        // Copy data from the object that's passed in as an argument (by const reference)
+        for (std::size_t i{0}; i < size; ++i)
         {
             data[i] = obj.data[i];
         }
     }
-    // Move constructor to transfer the ownership to another object
+    // Move constructor (it runs when we're transferring the ownership to another object when the class is being instantiated)
     Array(const Array &&obj)
     {
-        // Allocate memory on the heap
+        std::cout << "Move constructor ran..." << std::endl;
+        // Allocate memory on the heap at runtime for an array of integers when an object is being created by passing the ownership from an already existing object
         data = new int[size]{};
-        std::cout << "Move constructor ran" << std::endl;
-        for (std::size_t i{0}; i < size; i++)
+        // Fill the array with data of the object that's passed in as an argument
+        for (std::size_t i{0}; i < size; ++i)
         {
             data[i] = obj.data[i];
         }
     }
-    // Copy assignment operator is invoked when a copy of an already constructed object is being made
+    // Custom copy assignment operator (invoked when copying an object to an already created object)
     Array &operator=(const Array &obj)
     {
-        std::cout << "Copy assignment operator is used" << std::endl;
-        // Check if the object passed it is equal to the new object
+        std::cout << "Copy assignment operator is invoked..." << std::endl;
+        // Make sure that the object you copy is not our object
         if (this == &obj)
         {
-            // Simply return the pointer to our object
+            // If it is, return a pointer to the object
             return *this;
         }
         else
         {
-            // Deallocate memory for an array
+            // Otherwise, deallocate and then allocate memory on the heap to make a copy of an object
             delete[] data;
-            // Allocate memory on the heap for an array
-            data = new int[size];
-            // Fill the array with data from the object that's passed in as an argument to the function recursively in a for loop
-            for (std::size_t i{0}; i < size; i++)
+            data = new int[size]{};
+            // Fill the array with data from the object that's passed in as an argument
+            for (std::size_t i{0}; i < size; ++i)
             {
                 data[i] = obj.data[i];
             }
-            // Return the pointer to the object
-            return *this;
         }
+        return *this;
     }
-    // Move assignment operator
+    // Move assignment operator (transferring the ownership to another object after the class has been instantiated already)
     Array &operator=(const Array &&obj)
     {
-        std::cout << "Move assignment operator was used" << std::endl;
-        // Check if the objects are not the same
+        std::cout << "Move assignment operator is working..." << std::endl;
+        // Make sure that we're not referencing the same object
         if (this == &obj)
         {
+            // Return a pointer to the object itself
             return *this;
         }
-        else
+        else // otherwise deallocate memory, allocate memory and fill an object from the passed in object
         {
-            // Deallocate memory
             delete[] data;
-            // Allocate memory
             data = new int[size]{};
-            // Move data from obj array to our array (transfer ownership)
-            for (std::size_t i{0}; i < size; i++)
+            for (std::size_t i{0}; i < size; ++i)
             {
                 data[i] = obj.data[i];
             }
-            return *this;
         }
+        return *this;
     }
-    // Fill an array with some data
+    // Fill array
     void fillArray()
     {
-        for (std::size_t i{0}; i < size; i++)
+        for (std::size_t i{0}; i < size; ++i)
         {
             data[i] = i * 2;
         }
     }
-    // Set the array
+    // Set array
     void setArray(int idx, int arrData)
     {
         data[idx] = arrData;
     }
-    // Print the array
+    // Print array
     void printArray()
     {
-        for (std::size_t i{0}; i < size; i++)
+        for (std::size_t i{0}; i < size; ++i)
         {
             std::cout << data[i] << "\t";
         }
@@ -120,34 +123,29 @@ public:
     }
 };
 
-int main()
+int main(void)
 {
-    // Instantiate a new object
-    // Array arr1; // Dynamically allocated memory on the heap for a new array
-    // // Fill out a dynamically allocated array
-    // arr1.fillArray();
-    // arr1.printArray();
-    // // Now we want the copy constructor to run
-    // Array arr2{arr1}; // Copy constructor should run here. So if we don't have a custom copy constructor, the compiler will give us a default copy constructor for free which will be able to make only a shallow copy of the object since it'g going to use the same memory location as the previous object
-    // // Now we'll make a deep copy with its own memory address using our custom copy constructor
-    // arr2.printArray();
-    // // Copy assignment
-    // Array arr3;
-    // // Copy assignment operator should be invoked here after the object has already been constructed
-    // arr3 = arr2;
-    // arr3.printArray();
-    Array arr1;
+    // Let's instantiate the class (create an object from the class)
+    Array arr1{}; // Regular constructor should run here
+    // Fill the array
     arr1.fillArray();
-    Array arr2{std::move(arr1)};
-    arr2.printArray();
+    // Print the array
     arr1.printArray();
-    arr1.setArray(0, 50);
-    arr1.printArray();
+    // Let's create another object with and copy the existing object to it
+    Array arr2{arr1}; // Now the copy constructor should run
+    // Print a new array
     arr2.printArray();
-
-    arr2 = std::move(arr1);
-    arr2.printArray();
-    arr1.printArray();
+    // Now let's make a copy our object to another newly created object
+    Array arr3{}; // Regular constructor should run once again
+    arr3 = arr2;  // Copy assignment operator should be invoked here
+    arr3.printArray();
+    Array arr4{std::move(arr3)}; // Move constructor should run here
+    arr4.printArray();
+    arr3.printArray();
+    Array arr5;             // Regular constructor runs...
+    arr5 = std::move(arr4); // Move assignment operator should be invoked here
+    arr5.printArray();
+    arr4.printArray();
 
     return 0;
 }
