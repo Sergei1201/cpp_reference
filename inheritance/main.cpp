@@ -1,70 +1,72 @@
-/* Inheritance example in C++ */
+/* Inheritance in C++ */
 #include <iostream>
-#include <cmath>
-
 class Person
 {
+    /* Private member variables */
 protected:
     std::string m_firstName{};
     std::string m_lastName{};
     int m_age{};
-
+    /* Public member functions */
+    // Constructor
 public:
     explicit Person(std::string firstName, std::string lastName, int age)
         : m_firstName{firstName}, m_lastName{lastName}, m_age{age}
     {
     }
+    // Base virtual function (we're using virtual inheritance in this example)
     virtual const std::string greetings() const
     {
         return "Greetings " + m_firstName + " " + m_lastName + ". You are " + std::to_string(m_age);
     }
-    // Declare a friend function inside the class to overload << operator (access private and protected member variables of the class)
+    // Overload the << operator
     friend std::ostream &operator<<(std::ostream &os, const Person &obj);
 };
-// Overload << operator (free function)
+// Overload the << operator
 std::ostream &operator<<(std::ostream &os, const Person &obj)
 {
-    os << "Person's info. First name: " << obj.m_firstName << ". Last name: " << obj.m_lastName << ". Age: " << obj.m_age;
+    os << "Person's info. First name: " << obj.m_firstName << " Last name: " << obj.m_lastName << " Age: " << obj.m_age;
     return os;
 }
-// Public Inheritance
+// Child class
 class Student : public Person
 {
+    /* Private member variables */
 private:
-    double m_grade{};
-    std::string m_course{};
+    std::string m_subject{};
+    int m_grade{};
 
 public:
-    explicit Student(std::string firstName, std::string lastName, int age, float grade, std::string course)
-        // Calling the parent constructor
-        : Person{firstName, lastName, age}, m_grade{grade}, m_course{course}
+    /* Public member functions */
+    // Constructor (explicit in order to prevent the compiler from converting data types in the constructor)
+    explicit Student(std::string firstName, std::string lastName, int age, std::string subject, int grade)
+        // Call the parent constructor in order to initialize the student
+        : Person{firstName, lastName, age}, m_subject{subject}, m_grade{grade}
     {
     }
-    // Override the parent member function (virtual polymorphism)
+    // Override the virtual function of the base class
     const std::string greetings() const override
     {
-        return "Greetings " + m_firstName + " " + m_lastName + ". You are " + std::to_string(m_age) + ". Your grade is " + std::to_string(m_grade) + ". Your course is " + m_course;
+        return "Greetings " + m_firstName + " " + m_lastName + ". You are " + std::to_string(m_age) + ". You are studying " + m_subject + ". Your grade is " + std::to_string(m_grade);
     }
-    // Friend function for overloading << operator
+    // Override the << operator in the derived class as well
     friend std::ostream &operator<<(std::ostream &os, const Student &obj);
 };
-// Overload << operator (free function)
+// Override the << operator
 std::ostream &operator<<(std::ostream &os, const Student &obj)
 {
-    os << "Students's info. First name: " << obj.m_firstName << ". Last name: " << obj.m_lastName << ". Age: " << obj.m_age << ". Grade: " << obj.m_grade << ". Course: " << obj.m_course;
+    os << "Students's info. First name: " << obj.m_firstName << " Last name: " << obj.m_lastName << " Age: " << obj.m_age << " Subject: " << obj.m_subject << " Grade: " << obj.m_grade;
     return os;
 }
 
 int main(void)
 {
-    // Instantiate the Person class (base class)
+    // Instantiate Person class
     Person p1{"Sergei", "Sokolov", 40};
     std::cout << p1 << std::endl;
     std::cout << p1.greetings() << std::endl;
-    // Instantiate the Student class (derived class)
-    Student s1{"Daniil", "Sokolov", 10, 5, "Math"};
+    Student s1{"Daniil", "Sokolov", 10, "English", 5};
     std::cout << s1 << std::endl;
-    // Check out if we were able to override the parent member function
-    std::cout << s1.greetings() << std::endl;
+    std::cout << s1.greetings() << std::endl; // Should be overriden because of how the virtual tables work (virtual polymorphism)
     return 0;
 }
