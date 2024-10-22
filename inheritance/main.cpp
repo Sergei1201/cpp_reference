@@ -74,9 +74,9 @@ int main(void)
     {
         std::cout << obj->greetings() << std::endl;
     }
-
-    // Person *p1{new (std::nothrow) Person{"Sergei", "Sokolov", 40}};
-    //  Dynamically allocate memory on the heap at runtime to instantiate Student class
+    // Let's see the size of two objects just to confirm that the Students is part of the Person
+    std::cout << "Person's size: " << sizeof(Person) << std::endl;
+    std::cout << "Student's size: " << sizeof(Student) << std::endl;
 
     return 0;
 }
