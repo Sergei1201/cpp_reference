@@ -62,7 +62,7 @@ std::ostream &operator<<(std::ostream &os, const Student &obj)
 
 int main(void)
 {
-    // Dynamically allocate memory on the heap at runtime to instantiate Person class
+    // Instantiate Person & Student classes
     Person p1{"Sergei", "Sokolov", 40};
     Student s1{"Daniil", "Sokolov", 9, "Math", 5};
     // Declare a vector of pointers to store our object's addresses to demonstrate virtual polymorphism
@@ -74,7 +74,7 @@ int main(void)
     {
         std::cout << obj->greetings() << std::endl;
     }
-    // Let's see the size of two objects just to confirm that the Students is part of the Person
+    // Let's see the size of two objects just to confirm that the Student is part of the Person
     std::cout << "Person's size: " << sizeof(Person) << std::endl;
     std::cout << "Student's size: " << sizeof(Student) << std::endl;
 
