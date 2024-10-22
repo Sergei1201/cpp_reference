@@ -1,5 +1,6 @@
 /* Inheritance in C++ */
 #include <iostream>
+#include <vector>
 class Person
 {
     /* Private member variables */
@@ -61,12 +62,21 @@ std::ostream &operator<<(std::ostream &os, const Student &obj)
 
 int main(void)
 {
-    // Instantiate Person class
+    // Dynamically allocate memory on the heap at runtime to instantiate Person class
     Person p1{"Sergei", "Sokolov", 40};
-    std::cout << p1 << std::endl;
-    std::cout << p1.greetings() << std::endl;
-    Student s1{"Daniil", "Sokolov", 10, "English", 5};
-    std::cout << s1 << std::endl;
-    std::cout << s1.greetings() << std::endl; // Should be overriden because of how the virtual tables work (virtual polymorphism)
+    Student s1{"Daniil", "Sokolov", 9, "Math", 5};
+    // Declare a vector of pointers to store our object's addresses to demonstrate virtual polymorphism
+    std::vector<Person *> v{};
+    v.push_back(&p1);
+    v.push_back(&s1);
+    // Let's print the result of the greetings member function for each object (polymorphism should work here)
+    for (auto obj : v)
+    {
+        std::cout << obj->greetings() << std::endl;
+    }
+
+    // Person *p1{new (std::nothrow) Person{"Sergei", "Sokolov", 40}};
+    //  Dynamically allocate memory on the heap at runtime to instantiate Student class
+
     return 0;
 }
