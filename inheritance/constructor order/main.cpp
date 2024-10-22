@@ -1,4 +1,4 @@
-/* Constructor order in C++ */
+/* Order of constructors in C++ */
 #include <iostream>
 
 class A
@@ -9,27 +9,25 @@ private:
 public:
     A()
     {
-        std::cout << "A constructor ran..." << std::endl;
+        std::cout << "Default A constructor ran..." << std::endl;
     }
     A(std::string name)
+        : m_name{name}
     {
-        std::cout << "The parameterized A constructor ran..." << std::endl;
+        std::cout << "Parameterized A constructor ran..." << std::endl;
     }
 };
 class B : public A
 {
-private:
-    std::string m_firstName{};
-
 public:
     B()
     {
-        std::cout << "B constructor ran..." << std::endl;
+        std::cout << "Default B constructor ran..." << std::endl;
     }
-    B(std::string firstName)
-        : A(firstName)
+    B(std::string name)
+        : A(name)
     {
-        std::cout << "The parameterized B constructor ran..." << std::endl;
+        std::cout << "Parameterized B constructor ran..." << std::endl;
     }
 };
 class C : public B
@@ -37,19 +35,20 @@ class C : public B
 public:
     C()
     {
-        std::cout << "C constructor ran..." << std::endl;
+        std::cout << "Default C constructor ran..." << std::endl;
     }
     C(std::string name)
-        : B(name)
+        : B{name}
     {
-        std::cout << "The parameterized C constructor ran..." << std::endl;
+        std::cout << "Parameterized C constructor ran..." << std::endl;
     }
 };
 
 int main(void)
 {
-    // A a;
-    // B b{"Sergei"};
+    A a{"Sergei"};
+    B b{"Sergei"};
     C c{"Sergei"};
+    std::cout << "Size of A: " << sizeof(A) << " Size of B: " << sizeof(B) << " Size of C: " << sizeof(C) << std::endl;
     return 0;
 }
