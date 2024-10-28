@@ -2,7 +2,7 @@
 #include <iostream>
 #include <vector>
 /* Let's define a base "abstract" class which will have no implementation and which we will derive from to implement all the methods of this base class in the derived */
-class Person
+class Person // It's our interface/abstract class whose methods must be implemented in derived classes
 {
 protected:
     std::string m_firstName{};
@@ -15,8 +15,9 @@ public:
     virtual ~Person()
     {
     }
-    // Pure virtual function which we must implement in a derived class
-    virtual std::string greetings() const = 0;
+    // Pure virtual functions which we must implement in a derived class
+    virtual std::string greetings() const = 0; // Must be implemented in a derived class
+    virtual std::string getName() const = 0;   // Must be implemented in a derived class
 };
 // Derived class
 class Student : public Person
@@ -33,12 +34,16 @@ public:
     }
     ~Student()
     {
-        std::cout << "Destructor ran.." << std::endl;
+        std::cout << "The student destructor ran.." << std::endl;
     }
     // Public member functions
     std::string greetings() const override
     {
         return "Greetings " + m_firstName + " " + m_lastName + ". You are " + std::to_string(m_age);
+    }
+    std::string getName() const override
+    {
+        return m_firstName + " " + m_lastName;
     }
 };
 class Teacher : public Person
@@ -60,6 +65,10 @@ public:
     std::string greetings() const override
     {
         return "Greetings " + m_firstName + " " + m_lastName + " Your specialization is " + m_specialization;
+    }
+    std::string getName() const override
+    {
+        return m_firstName + " " + m_lastName;
     }
 };
 
