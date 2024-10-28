@@ -1,43 +1,49 @@
 /* Virtual functions in C++ */
 #include <iostream>
+#include <memory>
 
 class Base
 {
+private:
 public:
     Base()
     {
-        std::cout << "Base constructor ran..." << std::endl;
-    }
+        std::cout << "The base constructor ran..." << std::endl;
+    };
     virtual ~Base()
     {
-        std::cout << "Base destructor ran..." << std::endl;
+        std::cout << "The base destructor ran..." << std::endl;
     }
-    virtual const std::string greetings() const
+    virtual std::string greetings() const
     {
-        return "Greetings from the Base class";
+        return "Greetings from the base class";
     }
 };
 class Derived : public Base
 {
+private:
 public:
     Derived()
     {
-        std::cout << "Derived constructor ran..." << std::endl;
+        std::cout << "The derived constructor ran..." << std::endl;
+    }
+    std::string greetings() const override
+    {
+        return "Greetings from the derived class";
     }
     ~Derived()
     {
-        std::cout << "Derived destructor ran..." << std::endl;
-    }
-    const std::string greetings() const override
-    {
-        return "Greetings from the Derived class";
+        std::cout << "The derived destructor ran..." << std::endl;
     }
 };
 
 int main(void)
 {
-    Base *base{new Derived{}};
+    Derived derived;
+    Base *base{&derived};
     std::cout << base->greetings() << std::endl;
-    delete base;
+    // Base *base{new (std::nothrow) Derived};
+    // std::cout << base->greetings() << std::endl;
+    // delete base;
     return 0;
 }
