@@ -1,49 +1,73 @@
-/* Multiple virtual(diamond) inheritance use-case scenario */
+/* Virtual inheritance in C++
+Virtual inheritance is a C++ programming technique that ensures only one copy of a Base class will be made in a grand-child class in order to avoid ambiguity when using multiple inheritance (diamond inheritance)
+*/
 #include <iostream>
 
 struct Person
 {
-    std::string name{};
+public:
+    std::string m_name{};
+    // Constructor
     Person()
     {
         std::cout << "Person constructor ran..." << std::endl;
     }
+    // Destructor
     virtual ~Person()
     {
+        std::cout << "Person destructor ran..." << std::endl;
     }
 };
+// Public inheritance
+struct Teacher : virtual public Person
+{
+protected:
+    std::string m_course{};
 
+public:
+    // Constructor
+    Teacher()
+    {
+        std::cout << "Teacher constructor ran..." << std::endl;
+    }
+    // Destructor
+    ~Teacher()
+    {
+        std::cout << "Teacher destructor ran..." << std::endl;
+    }
+};
 struct Student : virtual public Person
 {
-    std::string course{};
+protected:
+    std::string specialization{};
+
+public:
+    // constructor
     Student()
     {
         std::cout << "Student constructor ran..." << std::endl;
     }
 };
-
-struct Teacher : virtual public Person
+// Grand child class
+class PHDStudent : public Teacher, Student
 {
-    std::string specialization{};
-    Teacher()
-    {
-        std::cout << "Teacher constructor ran..." << std::endl;
-    }
-};
-
-struct PHDStudent : public Student, Teacher
-{
+public:
+    // Constructor
     PHDStudent()
     {
-        std::cout << "PHD constructor ran..." << std::endl;
+        std::cout << "PHDStudent constructor ran..." << std::endl;
+    }
+    // Destructor
+    ~PHDStudent()
+    {
+        std::cout << "PHDStudent destructor ran..." << std::endl;
     }
 };
 
 int main(void)
 {
-    PHDStudent p1;
-    p1.name = "Sergei";
-    std::cout << p1.name << std::endl;
-    // Teacher t1;
+    PHDStudent phd;
+    phd.m_name = "Sergei";
+    std::cout << phd.m_name << std::endl;
     return 0;
 }
