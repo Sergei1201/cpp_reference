@@ -1,6 +1,7 @@
 #ifndef PERSON_HPP
 #define PERSON_HPP
 #include <iostream>
+#include <memory>
 
 class Person
 {
@@ -16,7 +17,8 @@ private:
     // Private member variables
     // Pointer to implementation
     struct pImpl;
-    pImpl *p_to_struct{nullptr};
+    std::unique_ptr<pImpl> p_to_struct{}; // Using a smart pointer
+    // pImpl *p_to_struct{nullptr};          // Using a raw pointer
 };
 
 #endif
