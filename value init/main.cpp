@@ -1,28 +1,43 @@
-/* Value initialization in C++ */
+/* Delegate constructor in C++ */
 #include <iostream>
 
-struct Person
+class Person
 {
+private:
+    // Private member variables (properties in other programming languages)
+    std::string m_first_Name{};
+    std::string m_last_Name{};
+    int m_age{};
+    int m_x{};
+    int m_y{};
+
+public:
+    // Constructor
     Person()
-        : firstName{"John"}, lastName{"Doe"}, x{10}, y{15}, p{nullptr}
+        : m_first_Name{"Sergei"}, m_last_Name{"Sokolov"}, m_age{40}
     {
+        std::cout << "Default constructor ran..." << std::endl;
     }
-    // Delegate constructor
-    Person(int _x, int _y) : Person()
+    // Delegate constructor is invoked here
+    Person(int _x, int _y)
+        : Person()
     {
-        x = _x;
-        y = _y;
+        std::cout << "Parameterized constuctor ran..." << std::endl;
+        m_x = _x;
+        m_y = _y;
     }
-    std::string firstName{};
-    std::string lastName{};
-    int x{};
-    int y{};
-    int *p{nullptr};
+    friend std::ostream &operator<<(std::ostream &os, const Person &obj);
 };
+std::ostream &operator<<(std::ostream &os, const Person &obj)
+{
+    os << "Person's information: " << obj.m_first_Name << " " << obj.m_last_Name << " " << obj.m_age;
+    return os;
+}
 
 int main(void)
 {
-    Person p1{30, 35};
-    std::cout << p1.firstName << " " << p1.lastName << " " << p1.x << " " << p1.y << std::endl;
+    Person p1{5, 10};
+    std::cout << p1 << std::endl;
+
     return 0;
 }
