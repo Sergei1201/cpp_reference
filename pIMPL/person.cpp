@@ -25,7 +25,7 @@ Person::~Person()
 {
     std::cout << "Destructor ran..." << std::endl;
     // Free memory and return it back to the OS after the objec has been destroyed (manually when using a raw pointer)
-    // delete p_to_struct; // Automatic memory realising when using a smart pointer
+    // delete p_to_struct; // Automatic memory releasing when using a smart pointer
 };
 // Member functions
 std::string Person::getName() const
