@@ -25,8 +25,9 @@ class Person {
 	
 
 /* Function prototyping */
-int squareNumber(int x);
-double squareNumber(double x);
+template <typename T>
+T squareNumber(T x);
+// double squareNumbe:r(double x);
 
 /* Main function  */
 int main(void){
@@ -40,9 +41,10 @@ int main(void){
 };
 
 /* Function definition */
-int squareNumber(int x){
+template <typename T>
+T squareNumber(T x){
 	return x * x;
 }
-double squareNumber(double x) {
+/* double squareNumber(double x) {
 	return x * x;
-}
+}*/
