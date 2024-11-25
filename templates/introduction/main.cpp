@@ -25,7 +25,7 @@ class Person {
 	
 
 /* Function prototyping */
-template <typename T>
+template <typename T> // Templates come in handy when function overloading is used
 T squareNumber(T x);
 // double squareNumbe:r(double x);
 
@@ -35,8 +35,8 @@ int main(void){
 	Person p{"John", "Doe", 40};
 	std::cout << p.greetings() << std::endl;
 	
-	std::cout << squareNumber(5) << std::endl;
-	std::cout << squareNumber(5.5) << std::endl;
+	std::cout << squareNumber<int>(5) << std::endl;
+	std::cout << squareNumber<double>(5.5) << std::endl;
 
 };
 
