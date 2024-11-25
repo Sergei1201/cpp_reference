@@ -49,7 +49,7 @@ public:
     }
 };
 // Grand child class
-class PHDStudent : public Teacher, Student
+struct PHDStudent : public Teacher, public Student
 {
 public:
     // Constructor

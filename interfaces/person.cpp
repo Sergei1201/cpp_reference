@@ -1,3 +1,4 @@
+/* Implementation of class */
 #include "person.hpp"
 #include <string>
 #include <string_view>
