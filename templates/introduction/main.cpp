@@ -3,6 +3,7 @@
 #include <memory>
 #include <ostream>
 #include <string>
+#include <vector>
 
 class Person {
 	private:
@@ -31,6 +32,7 @@ T squareNumber(T x);
 
 /* Main function  */
 int main(void){
+	// std::vector<int>v{};
 	// Instantiate a new person object
 	Person p{"John", "Doe", 40};
 	std::cout << p.greetings() << std::endl;
